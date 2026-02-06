@@ -9,7 +9,9 @@ import nebulice.hamster.hashGui.hashgui.handler.hold.HoldHandler;
 import nebulice.hamster.hashGui.hashgui.handler.hit.HitHandler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -25,7 +27,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class HashItem
 {
-	
+
 	private final ItemStack itemStack;
 	private ItemMeta itemMeta;
 
@@ -35,20 +37,20 @@ public class HashItem
 	private List<HitHandler> hitHandlers;
 	private List<DestroyHandler> destroyHandlers;
 
-	
+
 	/**
 	 * Creates a new HashItem.
-	 * 
+	 *
 	 * @param	type	Material type
 	 */
 	public HashItem(Material type)
 	{
 		this(type, 1, null);
 	}
-	
+
 	/**
 	 * Creates a new HashItem.
-	 * 
+	 *
 	 * @param	type	Material type
 	 * @param	amount	Amount of items
 	 */
@@ -56,10 +58,10 @@ public class HashItem
 	{
 		this(type, amount, null);
 	}
-	
+
 	/**
 	 * Creates a new HashItem.
-	 * 
+	 *
 	 * @param	type	Material type
 	 * @param	data	Item's data
 	 */
@@ -67,10 +69,10 @@ public class HashItem
 	{
 		this(type, 1, data);
 	}
-	
+
 	/**
 	 * Creates a new HashItem.
-	 * 
+	 *
 	 * @param	type	Material type
 	 * @param	amount	Amount of items
 	 * @param	data	Item's data
@@ -100,7 +102,7 @@ public class HashItem
 
 	/**
 	 * Creates a HashItem from an existing ItemStack.
-	 * 
+	 *
 	 * @param	item	ItemStack
 	 */
 	public HashItem(ItemStack item)
@@ -147,17 +149,22 @@ public class HashItem
 		final List<Component> newLore = new ArrayList<Component>();
 
 		for (Component line : this.itemMeta.lore()) {
-			if (!(line instanceof TextComponent l)) {
-				continue;
-			}
-			final String lineAsString = l.content();
-			String[] splittedLine = lineAsString.split("\\n");
+			final String legacy = LegacyComponentSerializer.legacySection().serialize(line);
+			String[] splittedLine = legacy.split("\\n");
 
 			for (int k = 0; k < splittedLine.length; k++) {
-				if (k > 0) {
-					splittedLine[k] = ChatColor.getLastColors(splittedLine[k - 1]) + splittedLine[k];
+				Component comp = LegacyComponentSerializer.legacySection().deserialize(splittedLine[k]);
+				if (k > 0 && !splittedLine[k].matches("^[\\u00A7&].*")) {
+					Component prev = LegacyComponentSerializer.legacySection().deserialize(splittedLine[k - 1]);
+					TextColor prevColor = prev.style().color();
+					if (prevColor != null) {
+						comp = comp.color(prevColor);
+					}
+					if (prev.style().hasDecoration(TextDecoration.ITALIC) && prev.style().decoration(TextDecoration.ITALIC) == TextDecoration.State.TRUE) {
+						comp = comp.decorate(TextDecoration.ITALIC);
+					}
 				}
-				newLore.add(Component.text(splittedLine[k]));
+				newLore.add(comp);
 			}
 		}
 
@@ -174,7 +181,7 @@ public class HashItem
 	{
 		this.formatLore();
 		this.itemStack.setItemMeta(this.itemMeta);
-		
+
 		guiManager.getClickManager().addItemHandlers(this);
 		guiManager.getInteractionManager().addItemHandlers(this);
 		guiManager.getHoldManager().addItemHandlers(this);
@@ -214,10 +221,10 @@ public class HashItem
 	{
 		return this.build(gui.getTitle(), guiManager);
 	}
-	
+
 	/**
 	 * Builds the item, without registering its handlers.
-	 * 
+	 *
 	 * @return	Itself
 	 */
 	public HashItem build()
@@ -249,7 +256,7 @@ public class HashItem
 	{
 		return this.itemMeta;
 	}
-	
+
 	/**
 	 * @return	Built item's ItemStack
 	 */
@@ -257,10 +264,10 @@ public class HashItem
 	{
 		return this.itemStack;
 	}
-	
+
 	/**
 	 * Sets item's type.
-	 * 
+	 *
 	 * @param	type	Item type.
 	 * @return	Itself
 	 */
@@ -269,10 +276,10 @@ public class HashItem
 		this.itemStack.setType(type);
 		return this;
 	}
-	
+
 	/**
 	 * Sets item's amount.
-	 * 
+	 *
 	 * @param	amount	Amount of items
 	 * @return	Itself
 	 */
@@ -281,10 +288,10 @@ public class HashItem
 		this.itemStack.setAmount(amount);
 		return this;
 	}
-	
+
 	/**
 	 * Sets item's durability.
-	 * 
+	 *
 	 * @param	durability	Durability to set
 	 * @return	Itself
 	 */
@@ -306,7 +313,7 @@ public class HashItem
 	/**
 	 * Sets item's durability.
 	 * If you're manipulating {@link HashItem}s, please use
-	 * {@link HashItem#setDurability(int)}.
+	 * {@link HashItem#setDurability(int)}.w
 	 * <p>
 	 * This code is duplicated, but, I guess I can't do better.
 	 *
@@ -329,7 +336,7 @@ public class HashItem
 		((Damageable) meta).setDamage(item.getType().getMaxDurability() - durability);
 		item.setItemMeta(meta);
 	}
-	
+
 	/**
 	 * Sets item's data.
 	 * TODO: Finish this function.
@@ -358,7 +365,7 @@ public class HashItem
 
 	/**
 	 * Sets item's lore.
-	 * 
+	 *
 	 * @param	lore	Item lore.
 	 * @return	Itself
 	 */
@@ -367,10 +374,10 @@ public class HashItem
 		this.itemMeta.lore(lore);
 		return this;
 	}
-	
+
 	/**
 	 * Adds a line to item's lore.
-	 * 
+	 *
 	 * @param	line	Lore line.
 	 * @return	Itself
 	 * @apiNote Handles line breaks ! (<code>>br/<</code>)
@@ -411,24 +418,24 @@ public class HashItem
 		this.itemMeta.lore(null);
 		return this;
 	}
-	
+
 	/**
 	 * Sets item's flags.
-	 * 
+	 *
 	 * @param	flags	Item flags.
 	 * @return	Itself
 	 */
 	public HashItem setFlags(List<ItemFlag> flags)
 	{
 		this.itemMeta.getItemFlags().clear();
-		
+
 		flags.forEach(this.itemMeta::addItemFlags);
 		return this;
 	}
-	
+
 	/**
 	 * Adds a flag to item's flags.
-	 * 
+	 *
 	 * @param	flag	Item flag.
 	 * @return	Itself
 	 */
@@ -450,10 +457,10 @@ public class HashItem
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Makes item unbreakable.
-	 * 
+	 *
 	 * @param	unbreakable	Unbreakable
 	 * @return	Itself
 	 */
@@ -462,7 +469,7 @@ public class HashItem
 		this.itemMeta.setUnbreakable(unbreakable);
 		return this;
 	}
-	
+
 	/**
 	 * @return	Is item unbreakable ?
 	 */
@@ -470,10 +477,10 @@ public class HashItem
 	{
 		return this.itemMeta.isUnbreakable();
 	}
-	
+
 	/**
 	 * Adds an enchantment to the item.
-	 * 
+	 *
 	 * @param	enchantment	Enchantment type
 	 * @param	level		Enchantment level
 	 * @return	Itself
@@ -483,10 +490,10 @@ public class HashItem
 		this.itemMeta.addEnchant(enchantment, level, true);
 		return this;
 	}
-	
+
 	/**
 	 * Removes an enchantment from the item.
-	 * 
+	 *
 	 * @param	enchantment	Enchantment type
 	 * @return	Itself
 	 */
@@ -554,7 +561,7 @@ public class HashItem
 	 * Adds a click handler to the item.
 	 * If a handler with the same ClickType is already registered,
 	 * both will run on click.
-	 * 
+	 *
 	 * @param	clickHandler	Click handler.
 	 * @return	Itself
 	 */
@@ -579,12 +586,12 @@ public class HashItem
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Adds an interact handler to the item.
 	 * If a handler with the same Action is already registered,
 	 * both will run on interact.
-	 * 
+	 *
 	 * @param	interactHandler	Interact handler.
 	 * @return	Itself
 	 */
@@ -708,7 +715,7 @@ public class HashItem
 		this.clearDestroyHandlers();
 		return this;
 	}
-	
+
 	/**
 	 * @return	Item's click handlers.
 	 */
@@ -716,7 +723,7 @@ public class HashItem
 	{
 		return this.clickHandlers;
 	}
-	
+
 	/**
 	 * @return	Item's interact handlers.
 	 */

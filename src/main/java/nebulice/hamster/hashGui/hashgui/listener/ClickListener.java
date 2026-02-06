@@ -22,14 +22,14 @@ import nebulice.hamster.hashGui.hashgui.handler.click.ClickManager;
 public class ClickListener
 	implements Listener
 {
-	
+
 	private final ClickManager clickManager;
-	
-	
+
+
 	/**
 	 * Creates a new instance of HashGuiClickListener, with
 	 * a click manager for click handling.
-	 * 
+	 *
 	 * @param	clickManager	Click manager
 	 */
 	public ClickListener(ClickManager clickManager)
@@ -119,6 +119,8 @@ public class ClickListener
 	public void onItemDrag(InventoryClickEvent event)
 	{
 		final InventoryView view = event.getView();
+		final InventoryAction action = event.getAction();
+		final String actionName = action.name();
 
 		if (!(view.getTopInventory().getHolder() instanceof HashGui gui) ||
 			view.getCursor() == null) {
@@ -129,9 +131,9 @@ public class ClickListener
 			return;
 		}
 
-		if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY ||
-			event.getAction() == InventoryAction.HOTBAR_SWAP ||
-			event.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) {
+		if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY ||
+			action == InventoryAction.HOTBAR_SWAP ||
+			actionName.contains("HOTBAR_MOVE")) {
 			event.setCancelled(true);
 		}
 	}

@@ -17,14 +17,14 @@ import nebulice.hamster.hashGui.hashgui.handler.interact.InteractHandler;
 public class InteractListener
 	implements Listener
 {
-	
+
 	private final InteractionManager interactManager;
-	
-	
+
+
 	/**
 	 * Creates a new instance of InteractListener, with
 	 * an interact manager for interact handling.
-	 * 
+	 *
 	 * @param	interactManager	Interact manager
 	 */
 	public InteractListener(InteractionManager interactManager)

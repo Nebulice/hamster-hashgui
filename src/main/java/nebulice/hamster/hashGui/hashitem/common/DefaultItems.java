@@ -2,7 +2,8 @@ package nebulice.hamster.hashGui.hashitem.common;
 
 import nebulice.hamster.hashGui.hashitem.HashItem;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 
 /**
@@ -13,14 +14,14 @@ public enum DefaultItems
 
     ITEM_NOT_FOUND(
         new HashItem(Material.BARRIER)
-            .setName(Component.text(ChatColor.RED + "Item not found."))
-            .addLore(Component.text("" + ChatColor.GRAY + ChatColor.ITALIC + "I am a poor dev that can't do his work properly."))
+            .setName(Component.text("Item not found.").color(NamedTextColor.RED))
+            .addLore(Component.text("I am a poor dev that can't do his work properly.").color(NamedTextColor.GRAY).decorate(TextDecoration.ITALIC))
     ),
 
     ITEM_BUILD_FAIL(
         new HashItem(Material.BARRIER)
-            .setName(Component.text(ChatColor.RED + "Item failed to build."))
-            .addLore(Component.text("" + ChatColor.GRAY + ChatColor.ITALIC + "I am a poor dev that can't do his work properly."))
+            .setName(Component.text("Item failed to build.").color(NamedTextColor.RED))
+            .addLore(Component.text("I am a poor dev that can't do his work properly.").color(NamedTextColor.GRAY).decorate(TextDecoration.ITALIC))
     );
 
 
