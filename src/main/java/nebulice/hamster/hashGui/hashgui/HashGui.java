@@ -136,7 +136,7 @@ public class HashGui implements InventoryHolder
 	 */
 	public HashGui addItem(HashItem item)
 	{
-		return this.addItem(item.getItemStack());
+		return this.addItem(item.build().getItemStack());
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class HashGui implements InventoryHolder
 	 */
 	public HashGui setItem(int index, HashItem item)
 	{
-		return this.setItem(index, item.getItemStack());
+		return this.setItem(index, item.build().getItemStack());
 	}
 	
 	/**
