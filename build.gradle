@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'com.gradleup.shadow' version '9.2.1'
+    id 'maven-publish'
 }
 
 group = 'nebulice.hamster.hashGui'
@@ -79,4 +80,16 @@ tasks.register('make', Copy) {
     from('build/libs')
     into hashrc
     include '*.jar'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = rootProject.name
+            version = version
+
+            from components.java
+        }
+    }
 }
