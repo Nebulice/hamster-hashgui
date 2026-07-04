@@ -12,6 +12,7 @@ def libsFolder = 'libs'
 
 repositories {
     mavenCentral()
+    maven { url = uri('https://repo.alessiodp.com/releases/') }
     maven {
         name = "papermc"
         url = uri("https://repo.papermc.io/repository/maven-public/")
