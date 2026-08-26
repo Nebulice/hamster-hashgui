@@ -62,10 +62,26 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+            - name: 📦 Build Dependencies (if required)
+        run: |
+          mkdir -p /tmp/deps
+          IFS="," read -ra DEPS <<< "hamster-hashgui"
+          for dep in "${DEPS[@]}"; do
+            echo "Cloning and building dependency ${dep}..."
+            rm -rf "/tmp/deps/${dep}"
+            git clone --depth 1 -b "${TARGET_BRANCH}" "https://oauth2:${{ secrets.GH_PAT }}@github.com/${{ github.repository_owner }}/${dep}.git" "/tmp/deps/${dep}" 2>/dev/null || \
+            git clone --depth 1 "https://oauth2:${{ secrets.GH_PAT }}@github.com/${{ github.repository_owner }}/${dep}.git" "/tmp/deps/${dep}"
+            
+            cd "/tmp/deps/${dep}"
+            chmod +x gradlew
+            ./gradlew publishToMavenLocal --no-daemon || true
+            cd -
+          done
+
       - name: 🔨 Build Plugin
         run: |
           chmod +x gradlew
-          ./gradlew build --no-daemon
+          ./gradlew build publishToMavenLocal --no-daemon || ./gradlew build --no-daemon
 
       - name: 📦 Locate Compiled JAR
         run: |
