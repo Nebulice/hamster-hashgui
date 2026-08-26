@@ -1,0 +1,23 @@
+name: 🐳 Build & Push Plugin (Hamster-Hashgui)
+
+on:
+  push:
+    branches:
+      - main
+      - integration
+      - integrations
+      - dev
+      - 'refactor/*'
+      - 'feat/*'
+  workflow_dispatch:
+
+jobs:
+  call-reusable-workflow:
+    uses: Nebulice/Hamster-docker/.github/workflows/reusable-plugin-ci.yml@main
+    with:
+      plugin_id: 'hamster-hashgui'
+      plugin_name: 'Hamster-Hashgui'
+      jar_name: 'Hamster-Hashgui.jar'
+      depends_on: ''
+    secrets:
+      GH_PAT: ${ secrets.GH_PAT }
