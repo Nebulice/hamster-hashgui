@@ -1,4 +1,4 @@
-name: 🐳 Build & Push Plugin (hamster-hashgui)
+name: 🐳 Build & Push Plugin (Hamster-Hashgui)
 
 on:
   push:
@@ -7,117 +7,17 @@ on:
       - integration
       - integrations
       - dev
-      - "refactor/*"
-      - "feat/*"
+      - 'refactor/*'
+      - 'feat/*'
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-
 jobs:
-  build-and-push:
-    runs-on: self-hosted
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: 🏷️ Compute Environment & Image Tag
-        id: meta
-        run: |
-          RAW_SHA="${{ github.sha }}"
-          SHORT_SHA="${RAW_SHA:0:7}"
-          BRANCH="${{ github.ref_name }}"
-          
-          if [ "${BRANCH}" = "main" ]; then
-            ENV_NAME="prod-1"
-          elif [ "${BRANCH}" = "integration" ] || [ "${BRANCH}" = "integrations" ]; then
-            ENV_NAME="integration"
-          else
-            ENV_NAME="dev"
-          fi
-          
-          PLUGIN_ID="hamster-plugin-hashgui"
-          IMAGE_TAG="${ENV_NAME}-${PLUGIN_ID}-${SHORT_SHA}"
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${PLUGIN_ID}"
-          IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr "[:upper:]" "[:lower:]")
-          
-          echo "TARGET_BRANCH=${BRANCH}" >> $GITHUB_ENV
-          echo "TARGET_ENV=${ENV_NAME}" >> $GITHUB_ENV
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
-          echo "FULL_IMAGE=${IMAGE_NAME_LOWER}" >> $GITHUB_ENV
-          echo "PLUGIN_ID=${PLUGIN_ID}" >> $GITHUB_ENV
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "21"
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: 🔨 Build Plugin
-        run: |
-          chmod +x gradlew
-          ./gradlew build publishToMavenLocal --no-daemon || ./gradlew build --no-daemon
-
-      - name: 📦 Locate Compiled JAR
-        run: |
-          mkdir -p build_artifact
-          ALL_JAR=$(find build/libs -type f -name "*-all.jar" 2>/dev/null | head -n 1)
-          if [ -n "$ALL_JAR" ]; then
-            cp "$ALL_JAR" build_artifact/
-          else
-            NORM_JAR=$(find build/libs -type f -name "*.jar" ! -name "*-javadoc.jar" ! -name "*-sources.jar" 2>/dev/null | head -n 1)
-            if [ -n "$NORM_JAR" ]; then
-              cp "$NORM_JAR" build_artifact/
-            else
-              echo "Error: No .jar file found in build/libs!"
-              exit 1
-            fi
-          fi
-          
-          mv build_artifact/*.jar build_artifact/hamster-hashgui.jar 2>/dev/null || true
-          ls -la build_artifact/
-
-      - name: Create Dockerfile for Plugin Artifact
-        run: |
-          cat << "EOF" > Dockerfile.plugin
-          FROM alpine:latest
-          WORKDIR /plugins
-          COPY build_artifact/*.jar /plugins/
-          EOF
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GH_PAT }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🐳 Build & Push Plugin Image to GHCR
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile.plugin
-          push: true
-          tags: |
-            ${{ env.FULL_IMAGE }}:${{ env.IMAGE_TAG }}
-            ${{ env.FULL_IMAGE }}:${{ env.TARGET_ENV }}-latest
-
-      - name: 🔄 Trigger ArgoCD Tag Update in Hamster-docker
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GH_PAT }}" \
-            "https://api.github.com/repos/${{ github.repository_owner }}/Hamster-docker/dispatches" \
-            -d "{\"event_type\": \"update-k8s-tag\", \"client_payload\": {\"app\": \"${{ env.PLUGIN_ID }}\", \"tag\": \"${{ env.IMAGE_TAG }}\", \"env\": \"${{ env.TARGET_ENV }}\", \"sha\": \"${{ github.sha }}\"}}"
+  call-reusable-workflow:
+    uses: Nebulice/Hamster-docker/.github/workflows/reusable-plugin-ci.yml@main
+    with:
+      plugin_id: 'hamster-plugin-hashgui'
+      plugin_name: 'Hamster-Hashgui'
+      jar_name: 'Hamster-Hashgui.jar'
+      depends_on: ''
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}
