@@ -1,0 +1,20 @@
+name: 🔄 Trigger Docker Build on Hamster-docker
+
+on:
+  push:
+    branches:
+      - main
+      - feat/ws-admin-cache
+      - refactor/cbt2
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Trigger hamster-plugin build on Hamster-docker
+        run: |
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
+            https://api.github.com/repos/Nebulice/Hamster-docker/dispatches \
+            -d '{"event_type":"build-plugins","client_payload":{"branch":"${{ github.ref_name }}","sha":"${{ github.sha }}"}}'
