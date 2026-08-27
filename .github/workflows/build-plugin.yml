@@ -51,11 +51,17 @@ jobs:
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
           echo "FULL_IMAGE=${IMAGE_NAME_LOWER}" >> $GITHUB_ENV
 
-      - name: Set up JDK 21
+      - name: Set up JDK 21 (Gradle Daemon)
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Set up JDK 25 (Compilation Toolchain)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -65,7 +71,7 @@ jobs:
       - name: 🔨 Build Plugin
         run: |
           chmod +x gradlew 2>/dev/null || true
-          ./gradlew shadowJar --no-daemon || ./gradlew build publishToMavenLocal --no-daemon || ./gradlew build --no-daemon
+          JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew shadowJar --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build publishToMavenLocal --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build --no-daemon
 
       - name: 📦 Locate Compiled JAR
         run: |
