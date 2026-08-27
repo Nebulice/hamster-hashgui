@@ -96,6 +96,26 @@ jobs:
           echo "Found JAR artifact:"
           ls -la build_artifact/
 
+      - name: 📁 Deploy JAR to K8s Host Plugin Folder (/root/Hamster-docker/JARS/Plugins)
+        run: |
+          JAR_FILE=$(find build_artifact -type f -name "*.jar" | head -n 1)
+          if [ -n "$JAR_FILE" ]; then
+            PID="hamster-hashgui"
+            if [[ "$PID" == *"velocity"* ]]; then
+              TARGET_DIR="/root/Hamster-docker/JARS/Plugins/velocity"
+            elif [[ "$PID" == *"hashgui"* ]]; then
+              TARGET_DIR=""
+            else
+              TARGET_DIR="/root/Hamster-docker/JARS/Plugins/mc"
+            fi
+
+            if [ -n "$TARGET_DIR" ]; then
+              mkdir -p "$TARGET_DIR"
+              cp -f "$JAR_FILE" "$TARGET_DIR/"
+              echo "✅ Deployed $(basename "$JAR_FILE") to $TARGET_DIR/"
+            fi
+          fi
+
       - name: Create Dockerfile for Plugin Artifact
         run: |
           cat << 'EOF' > Dockerfile.plugin
