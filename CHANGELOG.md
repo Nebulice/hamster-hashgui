@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `8d4792d` - 2026-09-05 18:09:18 (+0200)
+## Commit `fc70bcf` - 2026-09-05 18:31:27 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,14 @@
 
 ---
 
+## Commit `58d46d5` - 2026-09-05 18:31:27 (+0200)
+**Sujet Karma :** `fix(ci): ajout de Hamster-Economie et Hamster-Whitelist aux dependances de build`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/github/workflows/build-plugin.yml) : Refactorisation et mise à jour selon les normes du projet.
+
+---
 ## Commit `801901e` - 2026-09-05 18:09:18 (+0200)
 **Sujet Karma :** `fix(ci): correction de la syntaxe heredoc EOF du workflow Dockerfile`  
 **Auteur :** blegourr <blegourr@gmail.com>

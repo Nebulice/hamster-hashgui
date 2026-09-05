@@ -70,7 +70,7 @@ jobs:
         run: |
           TOKEN="${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}"
           mkdir -p /tmp/deps
-          DEPS=("hamster-hashgui" "Hamster-Utility" "Hamster-Core")
+          DEPS=("hamster-hashgui" "Hamster-Utility" "Hamster-Core" "Hamster-Economie" "Hamster-Whitelist")
           for dep in "${DEPS[@]}"; do
             echo "Cloning and building dependency ${dep}..."
             rm -rf "/tmp/deps/${dep}"
