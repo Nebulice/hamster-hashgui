@@ -81,7 +81,7 @@ jobs:
             if [ -d "/tmp/deps/${dep}" ]; then
               cd "/tmp/deps/${dep}"
               chmod +x gradlew 2>/dev/null || true
-              JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew publishToMavenLocal --no-daemon || true
+              JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew publishToMavenLocal -Porg.gradle.java.installations.paths="${JAVA_HOME_25_X64:-$JAVA_HOME}" --no-daemon || true
               cd -
             fi
           done
@@ -89,7 +89,7 @@ jobs:
       - name: 🔨 Build Plugin
         run: |
           chmod +x gradlew 2>/dev/null || true
-          JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew shadowJar --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build publishToMavenLocal --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build --no-daemon
+          JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew shadowJar -Porg.gradle.java.installations.paths="${JAVA_HOME_25_X64:-$JAVA_HOME}" --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build publishToMavenLocal --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build -Porg.gradle.java.installations.paths="${JAVA_HOME_25_X64:-$JAVA_HOME}" --no-daemon
 
       - name: 📦 Locate Compiled JAR
         run: |
