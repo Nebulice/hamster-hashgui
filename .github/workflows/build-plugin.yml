@@ -116,7 +116,7 @@ jobs:
 
       - name: Create Dockerfile for Plugin Artifact
         run: |
-          cat << '          EOF' > Dockerfile.plugin
+          cat << 'EOF' > Dockerfile.plugin
           FROM alpine:latest
           WORKDIR /plugins
           COPY build_artifact/*.jar /plugins/
