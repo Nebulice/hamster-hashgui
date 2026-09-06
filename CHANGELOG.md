@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `3cdbbd2` - 2026-09-06 14:40:31 (+0200)
+## Commit `a922b48` - 2026-09-06 14:48:45 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,16 @@
 
 ---
 
+## Commit `cbf164e` - 2026-09-06 14:48:45 (+0200)
+**Sujet Karma :** `fix(ci): mise a jour du wrapper gradle 8.12.1 et java home 21 pour execution daemon`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/.github/workflows/build-plugin.yml) : Mise a jour du workflow avec JAVA_HOME_21_X64 pour launcher Gradle daemon
+- ✏️ [build.gradle](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/build.gradle) : Refactorisation et mise à jour selon les normes du projet.
+- ✏️ [gradle-wrapper.properties](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/gradle/wrapper/gradle-wrapper.properties) : Passage sur Gradle 8.12.1
+
+---
 ## Commit `d179c48` - 2026-09-06 14:40:31 (+0200)
 **Sujet Karma :** `fix(ci): passer a gradle 9.2.1 et deleguer au reusable-plugin-ci`  
 **Auteur :** blegourr <blegourr@gmail.com>
