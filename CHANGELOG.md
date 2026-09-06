@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `9883201` - 2026-09-06 14:05:57 (+0200)
+## Commit `7ac95e9` - 2026-09-06 14:12:07 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,14 @@
 
 ---
 
+## Commit `af8eabb` - 2026-09-06 14:12:07 (+0200)
+**Sujet Karma :** `ci(workflow): convert to self-contained standalone inline workflow`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/github/workflows/build-plugin.yml) : Mise a jour du workflow en version autonome et inline avec dependances topologiques
+
+---
 ## Commit `dfc5248` - 2026-09-06 14:05:57 (+0200)
 **Sujet Karma :** `ci(workflow): reference reusable workflow on dev branch`  
 **Auteur :** blegourr <blegourr@gmail.com>
