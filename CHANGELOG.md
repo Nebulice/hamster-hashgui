@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `a922b48` - 2026-09-06 14:48:45 (+0200)
+## Commit `2298c8d` - 2026-09-06 15:12:45 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,14 @@
 
 ---
 
+## Commit `68e1707` - 2026-09-06 15:12:45 (+0200)
+**Sujet Karma :** `fix(ci): refonte workflow avec extraction des librairies depuis les images docker ghcr`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/.github/workflows/build-plugin.yml) : Refonte du workflow pour extraire les librairies .jar depuis les images Docker GHCR des dependances
+
+---
 ## Commit `cbf164e` - 2026-09-06 14:48:45 (+0200)
 **Sujet Karma :** `fix(ci): mise a jour du wrapper gradle 8.12.1 et java home 21 pour execution daemon`  
 **Auteur :** blegourr <blegourr@gmail.com>

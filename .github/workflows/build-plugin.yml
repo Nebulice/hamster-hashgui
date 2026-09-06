@@ -7,8 +7,8 @@ on:
       - integration
       - integrations
       - dev
-      - 'refactor/*'
-      - 'feat/*'
+      - refactor/*
+      - feat/*
   repository_dispatch:
     types: [dependency_updated, build-plugin]
   workflow_dispatch:
@@ -48,7 +48,7 @@ jobs:
           
           IMAGE_TAG="${ENV_NAME}-hamster-plugin-hashgui-${SHORT_SHA}"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/hamster-plugin-hashgui"
-          IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr [:upper:] [:lower:])
           
           echo "TARGET_BRANCH=${BRANCH}" >> $GITHUB_ENV
           echo "TARGET_ENV=${ENV_NAME}" >> $GITHUB_ENV
@@ -58,14 +58,14 @@ jobs:
       - name: Set up JDK 21 (Gradle Launcher)
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: 21
 
       - name: Set up JDK 25 (Compilation Toolchain)
         uses: actions/setup-java@v4
         with:
-          distribution: 'oracle'
-          java-version: '25'
+          distribution: oracle
+          java-version: 25
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -75,7 +75,7 @@ jobs:
       - name: 🔨 Build Plugin
         run: |
           chmod +x gradlew 2>/dev/null || true
-          JAVA_HOME="${{JAVA_HOME_21_X64:-$JAVA_HOME}}" ./gradlew shadowJar --no-daemon || JAVA_HOME="${{JAVA_HOME_21_X64:-$JAVA_HOME}}" ./gradlew build publishToMavenLocal --no-daemon || JAVA_HOME="${{JAVA_HOME_21_X64:-$JAVA_HOME}}" ./gradlew build --no-daemon
+          JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew shadowJar --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build publishToMavenLocal --no-daemon || JAVA_HOME="${JAVA_HOME_21_X64:-$JAVA_HOME}" ./gradlew build --no-daemon
 
       - name: 📦 Locate Compiled JAR
         run: |
@@ -122,11 +122,11 @@ jobs:
 
       - name: Create Dockerfile for Plugin Artifact
         run: |
-          cat << 'EOF' > Dockerfile.plugin
+          cat << DOCKER_EOF > Dockerfile.plugin
           FROM alpine:latest
           WORKDIR /plugins
           COPY build_artifact/*.jar /plugins/
-          EOF
+          DOCKER_EOF
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -160,7 +160,7 @@ jobs:
       - name: 🔄 Trigger Downstream Dependent Plugins
         run: |
           TOKEN="${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}"
-          DOWNSTREAM=("Hamster-Utility" "Hamster-Core" "Hamster-Core-velocity" "Hamster-Whitelist" "Hamster-Lore" "Hamster-sync" "Hamster-Economie" "Hamster-Head" "Hamster-Connect" "Hamster-ServerManager" "Hamster-Starter" "Hamster-ServerSwitch" "Hamster-Houses" "Hamster-DisplayStat" "Hamster-VelocityReconnect" "Hamster-VelocityRoutes")
+          DOWNSTREAM=(Hamster-Utility Hamster-Core Hamster-Core-velocity Hamster-Whitelist Hamster-Lore Hamster-sync Hamster-Economie Hamster-Head Hamster-Connect Hamster-ServerManager Hamster-Starter Hamster-ServerSwitch Hamster-Houses Hamster-DisplayStat Hamster-VelocityReconnect Hamster-VelocityRoutes)
           for downstream in "${DOWNSTREAM[@]}"; do
             echo "Sending repository_dispatch to downstream plugin ${downstream}..."
             curl -X POST \
