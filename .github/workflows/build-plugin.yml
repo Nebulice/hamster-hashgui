@@ -15,7 +15,7 @@ on:
 
 jobs:
   call-reusable-workflow:
-    uses: Nebulice/Hamster-docker/.github/workflows/reusable-plugin-ci.yml@main
+    uses: Nebulice/Hamster-docker/.github/workflows/reusable-plugin-ci.yml@dev
     with:
       plugin_id: 'hamster-plugin-hashgui'
       plugin_name: 'hamster-hashgui'

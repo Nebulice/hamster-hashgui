@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `5af3376` - 2026-09-06 13:47:08 (+0200)
+## Commit `9883201` - 2026-09-06 14:05:57 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,14 @@
 
 ---
 
+## Commit `dfc5248` - 2026-09-06 14:05:57 (+0200)
+**Sujet Karma :** `ci(workflow): reference reusable workflow on dev branch`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/github/workflows/build-plugin.yml) : Mise a jour du workflow pour cibler reusable-plugin-ci.yml sur la branche dev
+
+---
 ## Commit `f7c390f` - 2026-09-06 13:47:08 (+0200)
 **Sujet Karma :** `ci(workflow): update build-plugin workflow with topological dependencies and cascade triggers`  
 **Auteur :** blegourr <blegourr@gmail.com>
