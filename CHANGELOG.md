@@ -1,7 +1,7 @@
 # Changelog
 
 
-## Commit `7ac95e9` - 2026-09-06 14:12:07 (+0200)
+## Commit `3cdbbd2` - 2026-09-06 14:40:31 (+0200)
 **Sujet Karma :** `ci(hashgui): passer targetJavaVersion en version 21`  
 **Auteur :** blegourr <blegourr@gmail.com>
 
@@ -13,6 +13,15 @@
 
 ---
 
+## Commit `d179c48` - 2026-09-06 14:40:31 (+0200)
+**Sujet Karma :** `fix(ci): passer a gradle 9.2.1 et deleguer au reusable-plugin-ci`  
+**Auteur :** blegourr <blegourr@gmail.com>
+
+#### Fichiers Modifiés :
+- ✏️ [build-plugin.yml](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/github/workflows/build-plugin.yml) : Mise a jour du workflow pour deleguer a reusable-plugin-ci@dev
+- ✏️ [gradle-wrapper.properties](file:///home/blegourr/Documents/dev/nebulice/dev/plugins/hamster-hashgui/gradle/wrapper/gradle-wrapper.properties) : Mise a jour de Gradle wrapper vers 9.2.1
+
+---
 ## Commit `af8eabb` - 2026-09-06 14:12:07 (+0200)
 **Sujet Karma :** `ci(workflow): convert to self-contained standalone inline workflow`  
 **Auteur :** blegourr <blegourr@gmail.com>
